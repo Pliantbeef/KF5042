@@ -1,0 +1,16 @@
+
+
+%filename = "yelp_labelled.txt";
+%filename = "imdb_labelled_2.txt";
+%filename = "amazon_cells_labelled.txt";
+filename = "movies_train.xlsx";
+dataReviews = readtable(filename,'TextType','string'); 
+textData = dataReviews.text; %get review text 
+actualScore = dataReviews.label; %get review sentiment
+
+trainDocs = preprocessReviews(textData);
+classLabels = categorical(actualScore,[1 0],{'positive' 'negative'})
+BOW = bagOfWords(trainDocs);
+
+NBmdl = fitcnb(BOW.Counts,actualScore,'DistributionNames','mn');
+
